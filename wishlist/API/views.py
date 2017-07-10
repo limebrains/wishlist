@@ -1,3 +1,4 @@
+from rest_framework.pagination import CursorPagination
 from rest_framework.response import Response
 from rest_framework import viewsets, renderers, permissions
 from rest_framework.decorators import list_route
@@ -20,11 +21,8 @@ class WishlistViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
-    @list_route(url_path='user')
-    def user_wishlists(self, request, users=None):
-        return Response(Wishlist.objects.filter(users=users))
-
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    pagination_class = None
