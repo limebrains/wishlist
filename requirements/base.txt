@@ -12,6 +12,8 @@ django==1.10.7 # pyup: >=1.10,<1.11
 django-environ==0.4.3
 whitenoise==3.3.0
 
+drf-nested-routers==0.90.0
+
 
 # Forms
 django-braces==1.11.0

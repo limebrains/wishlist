@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from ..users.models import User
-from .models import Wishlist
+from .models import Wishlist, Item
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -13,8 +13,17 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 class WishlistSerializer(serializers.HyperlinkedModelSerializer):
     owner = UserSerializer(read_only=True)
+    users = UserSerializer(many=True)
 
     class Meta:
         model = Wishlist
-        fields = ('name', 'pk', 'description', 'date_created', 'owner', 'is_public')
+        fields = ('name', 'pk', 'description', 'date_created', 'owner', 'is_public', 'users')
+        read_only_fields = ('slug', 'date_updated')
 
+
+class ItemSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Item
+        fields = ('name', 'pk', 'url', 'date_created','raw_data')
+        read_only_fields = ('date_updated',)

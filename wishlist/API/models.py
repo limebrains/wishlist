@@ -1,5 +1,3 @@
-import itertools
-from django.utils import timezone
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.core.urlresolvers import reverse
@@ -41,9 +39,12 @@ class Item(models.Model):
     url = models.CharField(max_length=350)
     date_created = models.DateField(auto_now_add=True, editable=False)
     date_updated = models.DateField(auto_now=True)
-    raw_data = JSONField()
+    raw_data = JSONField(blank=True)
     wishlist = models.ForeignKey(Wishlist, on_delete=models.CASCADE)
 
     def get_absolute_url(self):
         return reverse('item:detail',
-                       kwargs={'name': self.name,'pk': self.pk})
+                       kwargs={'pk': self.pk})
+
+    def __str__(self):
+        return self.name
