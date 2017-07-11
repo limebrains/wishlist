@@ -41,6 +41,7 @@ DJANGO_APPS = [
     # Useful template tags:
     # 'django.contrib.humanize',
     'rest_framework',
+    'django_filters',
 
     # Admin
     'django.contrib.admin',
@@ -284,7 +285,6 @@ ADMIN_URL = r'^admin/'
 # ------------------------------------------------------------------------------
 
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
     'DEFAULT_PAGINATION_CLASS': 'config.pagination.CursorPagination',
     'PAGE_SIZE': 100
 }
