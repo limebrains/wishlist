@@ -26,10 +26,9 @@ class WishlistViewSet(FilterableMixin, viewsets.ModelViewSet):
     serializer_class = WishlistSerializer
 
     def get_queryset(self):
-        query = (Q)
         return Wishlist.objects.filter(
             Q(users=self.request.user) | Q(is_public=True)
-        )
+        ).distinct()
 
 
     def perform_create(self, serializer):
