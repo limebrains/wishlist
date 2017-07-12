@@ -41,6 +41,7 @@ class Item(models.Model):
     date_created = models.DateField(auto_now_add=True, editable=False)
     date_updated = models.DateField(auto_now=True)
     raw_data = JSONField(blank=True)
+    user_input = JSONField(blank=True, default='{}')
     wishlist = models.ForeignKey(Wishlist, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
