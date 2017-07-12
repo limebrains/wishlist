@@ -25,5 +25,5 @@ class ItemSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Item
-        fields = ('name', 'pk', 'url', 'date_created','raw_data')
-        read_only_fields = ('date_updated',)
+        fields = ('name', 'pk', 'url', 'date_created', 'date_updated', 'raw_data')
+        read_only_fields = ('raw_data',)

@@ -2,6 +2,7 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils.text import slugify
+from .metadata_scrapper import scrap
 from ..users.models import User
 
 
@@ -41,6 +42,15 @@ class Item(models.Model):
     date_updated = models.DateField(auto_now=True)
     raw_data = JSONField(blank=True)
     wishlist = models.ForeignKey(Wishlist, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        """
+        updating timestamps on save
+        """
+        if not self.raw_data:
+            self.raw_data = scrap(self.url)
+
+        return super(Item, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('item:detail',
