@@ -16,6 +16,12 @@ class WishlistFilter(filters.FilterSet):
         fields = ('name', 'description', 'users')
 
 
+class ItemFilter(filters.FilterSet):
+    class Meta:
+        model = Item
+        fields = ('name', 'url')
+
+
 class FilterableMixin:
     filter_backends = [DjangoFilterBackend, ]
 
@@ -38,11 +44,12 @@ class WishlistViewSet(FilterableMixin, viewsets.ModelViewSet):
         serializer.save(owner=self.request.user)
 
 
-class ItemViewSet (viewsets.ModelViewSet):
+class ItemViewSet (FilterableMixin, viewsets.ModelViewSet):
+    filter_class = ItemFilter
     serializer_class = ItemSerializer
+
     def get_queryset(self,):
         query = Item.objects.filter(wishlist=self.kwargs['wishlist_pk'])
-        print(query)
         return query
 
     def perform_create(self, serializer):

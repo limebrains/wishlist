@@ -8,7 +8,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'email')
+        fields = ('pk', 'username', 'email')
 
 
 class WishlistSerializer(serializers.HyperlinkedModelSerializer):
@@ -18,12 +18,10 @@ class WishlistSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Wishlist
         fields = ('name', 'pk', 'description', 'date_created', 'owner', 'is_public', 'users')
-        read_only_fields = ('slug', 'date_updated')
-
 
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Item
-        fields = ('name', 'pk', 'url', 'date_created', 'date_updated', 'raw_data')
+        fields = ('name', 'pk', 'url', 'date_created', 'date_updated', 'raw_data', 'user_input')
         read_only_fields = ('raw_data',)

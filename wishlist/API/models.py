@@ -21,7 +21,7 @@ class Wishlist(models.Model):
 
     def save(self, *args, **kwargs):
         """
-        updating timestamps on save
+        Generating simply slug during creation
         """
         if not self.slug:
             self.slug = '{0}-{1}'.format(slugify(self.name), self.pk)
@@ -46,7 +46,7 @@ class Item(models.Model):
 
     def save(self, *args, **kwargs):
         """
-        updating timestamps on save
+        Scrapping data from page upon creation
         """
         if not self.raw_data:
             self.raw_data = scrap(self.url)

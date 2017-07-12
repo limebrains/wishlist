@@ -17,6 +17,9 @@ def open_url(url):
 
 
 def metatag_validation(data_property, soup):
+    """
+    Returns none if property doesn't exists.
+    """
 
     if not (soup.find("meta", attrs={'property': data_property}) is None):
         return soup.find("meta", attrs={'property': data_property})['content']
@@ -42,7 +45,4 @@ def scrap(url):
 
 
 if __name__ == '__main__':
-    print(
-    scrap('http://allegro.pl/technorattan-meble-ogrodowe-komplet-dla-4' +
-          '-asturito-i6847244478.html?sh_dwh_token=d0b6dd74a8394345128e20d296cb1c5e')
-    )
+    pass
