@@ -1,8 +1,9 @@
 from django.contrib.postgres.fields import JSONField
-from django.db import models
 from django.core.urlresolvers import reverse
+from django.db import models
 from django.utils.text import slugify
-from .metadata_scrapper import scrap
+
+from .scrappers.BL import scrap
 from ..users.models import User
 
 
