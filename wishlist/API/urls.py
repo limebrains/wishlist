@@ -3,7 +3,7 @@ from rest_framework_nested import routers
 
 from . import views
 
-router = routers.SimpleRouter()
+router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'wishlists', views.WishlistViewSet, base_name='wishlists')
 

@@ -9,23 +9,28 @@ data_to_gather = (
     ('price', 'twitter:data1'),
 )
 
+headers = {
+    'User-Agent':
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
+}
+
 
 def open_url(url):
-    potential_request = urllib.request.Request(url)
-    with urllib.request.urlopen(potential_request) as url:
+    potential_request = urllib.request.Request(url, headers=headers)
+    with urllib.request.urlopen(potential_request,) as url:
         return url.read()
 
 
 def metatag_validation(data_property, soup):
+
     """
     Returns none if property doesn't exists.
     """
 
-    if not (soup.find("meta", attrs={'property': data_property}) is None):
-        return soup.find("meta", attrs={'property': data_property})['content']
-
-    if not (soup.find("meta", attrs={'name': data_property}) is None):
-        return soup.find("meta", attrs={'name': data_property})['content']
+    metatag_property_names = ['property', 'name']
+    for name in metatag_property_names:
+        if not (soup.find("meta", attrs={name: data_property}) is None):
+            return soup.find("meta", attrs={name: data_property})['content']
 
     return None
 
