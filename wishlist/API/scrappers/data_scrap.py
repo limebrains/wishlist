@@ -5,8 +5,8 @@ def steam_scrapping(game_data):
         ('image', 'background'),
         ('price', 'price_overview')
     )
-    raw_data = {}
-    raw_data['site'] = 'steam'
+    
+    raw_data = {'site': 'steam'}
 
     for name, property in data_to_gather:
         raw_data[name] = game_data[property]
