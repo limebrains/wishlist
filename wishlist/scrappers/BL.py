@@ -46,5 +46,10 @@ def scrap(url):
     return sites_dict[site_type](url)
 
 
+def refresh_price(url, price):
+    site_type = check_site_type(url)
+
+    pass
+
 if __name__ == '__main__':
     scrap('http://store.steampowered.com/app/438490/GOD_EATER_2_Rage_Burst/')

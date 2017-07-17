@@ -46,6 +46,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='item',
             name='wishlist',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='API.Wishlist'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.Wishlist'),
         ),
     ]

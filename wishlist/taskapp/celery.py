@@ -3,6 +3,8 @@ import os
 from celery import Celery
 from django.apps import apps, AppConfig
 from django.conf import settings
+from datetime import timedelta
+
 
 
 if not settings.configured:
@@ -26,7 +28,7 @@ class CeleryConfig(AppConfig):
 
         if hasattr(settings, 'RAVEN_CONFIG'):
             # Celery signal registration
-# Since raven is required in production only,
+            # Since raven is required in production only,
             # imports might (most surely will) be wiped out
             # during PyCharm code clean up started
             # in other environments.
@@ -34,14 +36,14 @@ class CeleryConfig(AppConfig):
             from raven import Client as RavenClient
             from raven.contrib.celery import register_signal as raven_register_signal
             from raven.contrib.celery import register_logger_signal as raven_register_logger_signal
-# @formatter:on
+            # @formatter:on
 
             raven_client = RavenClient(dsn=settings.RAVEN_CONFIG['DSN'])
             raven_register_logger_signal(raven_client)
             raven_register_signal(raven_client)
 
         if hasattr(settings, 'OPBEAT'):
-# Since opbeat is required in production only,
+            # Since opbeat is required in production only,
             # imports might (most surely will) be wiped out
             # during PyCharm code clean up started
             # in other environments.
@@ -50,7 +52,7 @@ class CeleryConfig(AppConfig):
             from opbeat.contrib.django.models import logger as opbeat_logger
             from opbeat.contrib.django.models import register_handlers as opbeat_register_handlers
             from opbeat.contrib.celery import register_signal as opbeat_register_signal
-# @formatter:on
+            # @formatter:on
 
             try:
                 opbeat_register_signal(opbeat_client)

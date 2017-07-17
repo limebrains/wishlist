@@ -13,14 +13,15 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 class WishlistSerializer(serializers.HyperlinkedModelSerializer):
     owner = UserSerializer(read_only=True)
-    users = UserSerializer(many=True)
+    users = UserSerializer(many=True, read_only=True)
 
     class Meta:
         model = Wishlist
-        fields = ('name', 'pk', 'description', 'date_created', 'owner', 'is_public', 'users')
+        fields = ('name', 'pk', 'description', 'date_created', 'owner', 'is_public', 'owner', 'users')
+        read_only_fields = ('owner', 'users')
+
 
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
-
     class Meta:
         model = Item
         fields = ('name', 'pk', 'url', 'date_created', 'date_updated', 'raw_data', 'user_input')

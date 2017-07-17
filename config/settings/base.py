@@ -7,6 +7,8 @@ https://docs.djangoproject.com/en/dev/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/dev/ref/settings/
 """
+from datetime import timedelta
+
 import environ
 
 ROOT_DIR = environ.Path(__file__) - 3  # (wishlist/config/settings/base.py - 3 = wishlist/)
@@ -58,7 +60,7 @@ LOCAL_APPS = [
     # custom users app
     'wishlist.users.apps.UsersConfig',
     # Your stuff: custom apps go here
-    'API.apps.ApiConfig'
+    'wishlist.api.apps.ApiConfig'
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -270,11 +272,22 @@ AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
 
 ########## CELERY
 INSTALLED_APPS += ['wishlist.taskapp.celery.CeleryConfig']
-CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='django://')
+CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='amqp://')
 if CELERY_BROKER_URL == 'django://':
     CELERY_RESULT_BACKEND = 'redis://'
 else:
     CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+
+# CELERYBEAT_SCHEDULE = {
+#     'add-every-2-seconds': {
+#         'task': 'wishlist.api.tasks.add',
+#         'schedule': timedelta(seconds=2),
+#         'args': (16, 16)
+#     },
+# }
+
+CELERY_TIMEZONE = 'UTC'
+
 ########## END CELERY
 
 

@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.text import slugify
 
-from ..scrappers.BL import scrap
+from ..scrappers.bl import scrap
 from ..users.models import User
 
 
