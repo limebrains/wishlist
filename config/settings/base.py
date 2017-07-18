@@ -271,6 +271,8 @@ LOGIN_URL = 'account_login'
 AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
 
 ########## CELERY
+# ------------------------------------------------------------------------------
+
 INSTALLED_APPS += ['wishlist.taskapp.celery.CeleryConfig']
 CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='amqp://')
 if CELERY_BROKER_URL == 'django://':
@@ -294,7 +296,7 @@ CELERY_QUEUES = {"periodic.tasks": {"exchange": "periodic.tasks",
                                }
                  }
 
-CELERY_ROUTES = {"item.update": {"queue": "que_new",
+CELERY_ROUTES = {"item.update": {"queue": "periodic.tasks",
                                  "routing_key": "item.update",
                                  "serializer": "json"},
                  "item.new": {"queue": "task.item.new",
@@ -304,7 +306,8 @@ CELERY_ROUTES = {"item.update": {"queue": "que_new",
 
 
 
-########## END CELERY
+# END CELERY
+# ------------------------------------------------------------------------------
 
 
 # Location of root django.contrib.admin URL, use {% url 'admin:index' %}
@@ -313,7 +316,13 @@ ADMIN_URL = r'^admin/'
 # Your common stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
 
+# REST
+# ------------------------------------------------------------------------------
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'config.pagination.CursorPagination',
     'PAGE_SIZE': 100
 }
+
+# END REST
+# ------------------------------------------------------------------------------

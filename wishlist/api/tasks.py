@@ -24,5 +24,16 @@ def update_price():
 
     countdown = 0
     for item in items:
-        get_item_raw_data.apply_async((item.pk,), countdown=countdown, queue='periodic.tasks')
+        get_item_raw_data.apply_async((item.pk,), countdown=countdown, routing_key='item.update')
         countdown += 2
+
+
+class Router(object):
+
+    def route_for_task(self, task, args=None, kwargs=None):
+        if task == "item.update":
+            return "periodic.tasks"
+        if task == "item.new":
+            return "task.item.new"
+        else:
+            return "default"
