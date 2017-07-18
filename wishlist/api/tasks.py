@@ -24,5 +24,5 @@ def update_price():
 
     countdown = 0
     for item in items:
-        get_item_raw_data.apply_async((item.pk,), countdown=countdown)
+        get_item_raw_data.apply_async((item.pk,), countdown=countdown, queue='periodic.tasks')
         countdown += 2

@@ -279,13 +279,30 @@ else:
     CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 
 CELERYBEAT_SCHEDULE = {
-        'update': {
+    'update': {
         'task': 'wishlist.api.tasks.update_price',
         'schedule': timedelta(seconds=30),
     },
 }
 
 CELERY_TIMEZONE = 'Europe/Warsaw'
+
+CELERY_QUEUES = {"periodic.tasks": {"exchange": "periodic.tasks",
+                                    "routing_key": "periodic.tasks"},
+                 "task.item.new": { "exchange": "task.item.new",
+                               "routing_key": "task.item.new"
+                               }
+                 }
+
+CELERY_ROUTES = {"item.update": {"queue": "que_new",
+                                 "routing_key": "item.update",
+                                 "serializer": "json"},
+                 "item.new": {"queue": "task.item.new",
+                                 "routing_key": "item.new",
+                                 "serializer": "json"}
+                 }
+
+
 
 ########## END CELERY
 
