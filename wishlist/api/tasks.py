@@ -1,23 +1,28 @@
+import datetime
 from celery import Celery
-from ..scrappers.bl import refresh_price, scrap
-from .models import Item
+from wishlist.api.models import Item
+from wishlist.scrappers.bl import scrap
 
 app = Celery()
 
-
 @app.task
-def add_item(url):
-    return scrap(url)
+def get_item_raw_data(pk):
+    print("Invoked get_item for {}".format(pk))
+    item = Item.objects.get(pk=pk)
+    item.raw_data = scrap(item.url)
+    item.save()
 
 
 @app.task
 def update_price():
-    items = Item.filter(price__isnull = False)
-    print(items)
+    time_threshold = datetime.datetime.now() - datetime.timedelta(minutes=5)
+
+    items = Item.objects \
+                .exclude(raw_data__contains={'price': None}) \
+                .filter(date_updated__lt=time_threshold) \
+                .order_by('date_updated')[:10]
+
+    countdown = 0
     for item in items:
-        refresh_price(item.url, item.raw_data['price'])
-
-
-@app.task
-def test(arg):
-    print(arg)
+        get_item_raw_data.apply_async((item.pk,), countdown=countdown)
+        countdown += 2

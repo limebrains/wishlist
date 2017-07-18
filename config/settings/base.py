@@ -278,15 +278,14 @@ if CELERY_BROKER_URL == 'django://':
 else:
     CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 
-# CELERYBEAT_SCHEDULE = {
-#     'add-every-2-seconds': {
-#         'task': 'wishlist.api.tasks.add',
-#         'schedule': timedelta(seconds=2),
-#         'args': (16, 16)
-#     },
-# }
+CELERYBEAT_SCHEDULE = {
+        'update': {
+        'task': 'wishlist.api.tasks.update_price',
+        'schedule': timedelta(seconds=30),
+    },
+}
 
-CELERY_TIMEZONE = 'UTC'
+CELERY_TIMEZONE = 'Europe/Warsaw'
 
 ########## END CELERY
 
