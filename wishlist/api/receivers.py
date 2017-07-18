@@ -8,4 +8,4 @@ from wishlist.wishlist.api.tasks import get_item_raw_data
 @receiver(post_save, sender=Item)
 def trigger_get_item_raw_data(instance, raw, created, **kwargs):
     if created or not instance.raw_data:
-        get_item_raw_data.delay(instance.pk, queue='task.item.new')
+        get_item_raw_data.delay(instance.pk)

@@ -8,6 +8,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/dev/ref/settings/
 """
 from datetime import timedelta
+from kombu import Exchange, Queue
 
 import environ
 
@@ -117,7 +118,6 @@ DATABASES = {
     'default': env.db('DATABASE_URL', default='postgres:///wishlist'),
 }
 DATABASES['default']['ATOMIC_REQUESTS'] = True
-
 
 # GENERAL CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -275,6 +275,8 @@ AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
 
 INSTALLED_APPS += ['wishlist.taskapp.celery.CeleryConfig']
 CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='amqp://')
+CELERY_TIMEZONE = 'Europe/Warsaw'
+
 if CELERY_BROKER_URL == 'django://':
     CELERY_RESULT_BACKEND = 'redis://'
 else:
@@ -283,28 +285,39 @@ else:
 CELERYBEAT_SCHEDULE = {
     'update': {
         'task': 'wishlist.api.tasks.update_price',
-        'schedule': timedelta(seconds=30),
+        'schedule': timedelta(seconds=10),
     },
 }
 
-CELERY_TIMEZONE = 'Europe/Warsaw'
+CELERY_DEFAULT_QUEUE = 'default'
+CELERY_DEFAULT_ROUTING_KEY = 'task.default'
+CELERY_ITEMS_ROUTING_KEY = 'task.items'
 
-CELERY_QUEUES = {"periodic.tasks": {"exchange": "periodic.tasks",
-                                    "routing_key": "periodic.tasks"},
-                 "task.item.new": { "exchange": "task.item.new",
-                               "routing_key": "task.item.new"
-                               }
-                 }
+CELERY_QUEUES = (
+    Queue('default', routing_key=CELERY_DEFAULT_QUEUE),
+    Queue('items', routing_key=CELERY_ITEMS_ROUTING_KEY),
+)
 
-CELERY_ROUTES = {"item.update": {"queue": "periodic.tasks",
-                                 "routing_key": "item.update",
-                                 "serializer": "json"},
-                 "item.new": {"queue": "task.item.new",
-                                 "routing_key": "item.new",
-                                 "serializer": "json"}
-                 }
-
-
+CELERY_ROUTES = {
+    'wishlist.api.tasks.update_price': {
+        'routing_key': CELERY_ITEMS_ROUTING_KEY,
+    },
+    'wishlist.api.tasks.get_item_raw_data': {
+        'routing_key': CELERY_ITEMS_ROUTING_KEY,
+    },
+}
+#
+#
+#     {
+#         'update.tasks.update_price': {
+#             'queue': QUEUE_ITEMS,
+#             'routing_key': 'update.price',
+#         },
+#         'update.tasks.get_item_raw_data': {
+#             'queue': 'update_tasks',
+#             'routing_key': 'update.price',
+#         },
+# }
 
 # END CELERY
 # ------------------------------------------------------------------------------
