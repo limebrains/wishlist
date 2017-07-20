@@ -46,6 +46,7 @@ DJANGO_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
+    'corsheaders',
 
     # Admin
     'django.contrib.admin',
@@ -78,6 +79,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 # MIGRATIONS CONFIGURATION
@@ -317,6 +320,12 @@ ADMIN_URL = r'^admin/'
 
 # Your common stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
+
+CORS_ORIGIN_REGEX_WHITELIST = (r'^http://localhost:8080/$')
+CORS_ORIGIN_WHITELIST = (
+    'google.com',
+    'http://localhost:8080/'
+)
 
 # REST
 # ------------------------------------------------------------------------------
