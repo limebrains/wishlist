@@ -1,8 +1,8 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from requests import Response
 from rest_framework import viewsets, permissions
 from django_filters import rest_framework as filters
 from django.db.models import Q
+
 
 from ..users.models import User
 from .permissions import IsOwnerOrReadOnly
@@ -61,3 +61,4 @@ class UserViewSet(FilterableMixin, viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     pagination_class = None
+

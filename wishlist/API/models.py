@@ -2,6 +2,11 @@ from django.contrib.postgres.fields import JSONField
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.text import slugify
+from django.conf import settings
+from django.db.models.signals import post_save
+from rest_framework.authtoken.models import Token
+from django.dispatch import receiver
+
 
 from ..users.models import User
 
@@ -53,3 +58,9 @@ class Item(models.Model):
 
     def __str__(self):
         return self.name
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)

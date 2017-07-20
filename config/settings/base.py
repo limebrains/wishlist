@@ -44,6 +44,7 @@ DJANGO_APPS = [
     # Useful template tags:
     # 'django.contrib.humanize',
     'rest_framework',
+    'rest_framework.authtoken',
     'django_filters',
 
     # Admin
@@ -306,18 +307,6 @@ CELERY_ROUTES = {
         'routing_key': CELERY_ITEMS_ROUTING_KEY,
     },
 }
-#
-#
-#     {
-#         'update.tasks.update_price': {
-#             'queue': QUEUE_ITEMS,
-#             'routing_key': 'update.price',
-#         },
-#         'update.tasks.get_item_raw_data': {
-#             'queue': 'update_tasks',
-#             'routing_key': 'update.price',
-#         },
-# }
 
 # END CELERY
 # ------------------------------------------------------------------------------
@@ -334,7 +323,18 @@ ADMIN_URL = r'^admin/'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'config.pagination.CursorPagination',
-    'PAGE_SIZE': 100
+    'PAGE_SIZE': 100,
+
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication'
+    )
+
 }
 
 # END REST
