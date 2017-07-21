@@ -2,7 +2,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, permissions
 from django_filters import rest_framework as filters
 from django.db.models import Q
-
+from rest_framework.decorators import detail_route, list_route
+from rest_framework.response import Response
 
 from ..users.models import User
 from .permissions import IsOwnerOrReadOnly
@@ -61,4 +62,8 @@ class UserViewSet(FilterableMixin, viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     pagination_class = None
+
+    @list_route(methods=['get'], permission_classes=[IsOwnerOrReadOnly], url_path='get-username')
+    def get_username(self, request):
+        return Response(UserSerializer(self.request.user).data)
 
