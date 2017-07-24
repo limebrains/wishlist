@@ -47,7 +47,7 @@ class Item(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
     raw_data = JSONField(blank=True, null=True)
     user_input = JSONField(blank=True, null=True, default='{}')
-    wishlist = models.ForeignKey(Wishlist, on_delete=models.CASCADE)
+    wishlist = models.ForeignKey(Wishlist, on_delete=models.CASCADE, related_name='items')
 
     def update_price(self):
         pass

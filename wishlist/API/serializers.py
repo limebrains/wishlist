@@ -11,18 +11,20 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('pk', 'username', 'email')
 
 
-class WishlistSerializer(serializers.HyperlinkedModelSerializer):
-    owner = UserSerializer(read_only=True)
-    users = UserSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Wishlist
-        fields = ('name', 'pk', 'description', 'date_created', 'date_updated', 'owner', 'is_public', 'owner', 'users')
-        read_only_fields = ('owner', 'users')
-
-
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Item
         fields = ('name', 'pk', 'url', 'date_created', 'date_updated', 'raw_data', 'user_input')
         read_only_fields = ('raw_data',)
+
+
+class WishlistSerializer(serializers.HyperlinkedModelSerializer):
+    owner = UserSerializer(read_only=True)
+    users = UserSerializer(many=True, read_only=True)
+    items = ItemSerializer(read_only=True, many=True,)
+
+    class Meta:
+        model = Wishlist
+        fields = ('name', 'pk', 'description', 'date_created', 'date_updated', 'owner', 'is_public', 'owner', 'users', 'items')
+
+

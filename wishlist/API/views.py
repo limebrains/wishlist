@@ -66,4 +66,3 @@ class UserViewSet(FilterableMixin, viewsets.ReadOnlyModelViewSet):
     @list_route(methods=['get'], permission_classes=[IsOwnerOrReadOnly], url_path='get-username')
     def get_username(self, request):
         return Response(UserSerializer(self.request.user).data)
-
