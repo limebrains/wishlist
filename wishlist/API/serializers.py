@@ -25,6 +25,9 @@ class WishlistSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Wishlist
-        fields = ('name', 'pk', 'description', 'date_created', 'date_updated', 'owner', 'is_public', 'owner', 'users', 'items')
+        fields = ('name', 'pk', 'description',
+                  'date_created', 'date_updated',
+                  'owner', 'is_public',
+                  'users', 'items')
 
 
