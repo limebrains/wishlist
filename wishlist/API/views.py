@@ -74,10 +74,6 @@ class UserViewSet(FilterableMixin, viewsets.ReadOnlyModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def get_permissions(self):
-        return (AllowAny() if self.request.method == 'POST'
-                else IsStaffOrTargetUser()),
-
     @list_route(methods=['get'], permission_classes=[IsOwnerOrReadOnly], url_path='get-username')
     def get_username(self, request):
         return Response(UserSerializer(self.request.user).data)
