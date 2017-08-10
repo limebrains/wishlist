@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
 from ..users.models import User
 from .models import Wishlist, Item
@@ -8,7 +9,16 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ('pk', 'username', 'email')
+        write_only_fields = ('password',)
+        read_only_fields = ('is_staff', 'is_superuser',)
+        fields = ('pk', 'username', 'email', 'is_staff', 'is_superuser',)
+
+    def update(self, attrs, instance=None):
+        # call set_password on user object. Without this
+        # the password will be stored in plain text.
+        user = super(UserSerializer, self).restore_object(attrs, instance)
+        user.set_password(attrs['password'])
+        return user
 
 
 class ItemSerializer(serializers.HyperlinkedModelSerializer):

@@ -1,12 +1,16 @@
+from django.views.decorators.csrf import csrf_exempt
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status
 from rest_framework import viewsets, permissions
 from django_filters import rest_framework as filters
 from django.db.models import Q
-from rest_framework.decorators import detail_route, list_route
+from rest_framework.decorators import list_route, api_view, permission_classes
+from rest_framework.parsers import JSONParser
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from ..users.models import User
-from .permissions import IsOwnerOrReadOnly
+from .permissions import IsOwnerOrReadOnly, IsStaffOrTargetUser
 from .serializers import WishlistSerializer, UserSerializer, ItemSerializer
 from .models import Wishlist, Item
 
@@ -62,6 +66,17 @@ class UserViewSet(FilterableMixin, viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     pagination_class = None
+
+    def post(self, request, format=None):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get_permissions(self):
+        return (AllowAny() if self.request.method == 'POST'
+                else IsStaffOrTargetUser()),
 
     @list_route(methods=['get'], permission_classes=[IsOwnerOrReadOnly], url_path='get-username')
     def get_username(self, request):
