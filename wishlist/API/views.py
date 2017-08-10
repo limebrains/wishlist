@@ -37,11 +37,15 @@ class WishlistViewSet(FilterableMixin, viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = Wishlist.objects.filter(
-            (Q(users=self.request.user) & Q(is_public=False))
-            |
-            (Q(is_public=True))
-        ).distinct()
+            (Q(users=self.request.user) & Q(is_public=False)))
+
         return qs
+
+    @list_route(methods=['get'], url_path='get-public')
+    def get_public(self, request):
+        queryset = Wishlist.objects.filter(is_public=True)
+        result = self.get_serializer(queryset, many=True)
+        return Response(result.data)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user,
