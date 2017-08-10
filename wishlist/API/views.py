@@ -4,13 +4,11 @@ from rest_framework import status
 from rest_framework import viewsets, permissions
 from django_filters import rest_framework as filters
 from django.db.models import Q
-from rest_framework.decorators import list_route, api_view, permission_classes
-from rest_framework.parsers import JSONParser
-from rest_framework.permissions import AllowAny
+from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
 from ..users.models import User
-from .permissions import IsOwnerOrReadOnly, IsStaffOrTargetUser
+from .permissions import IsOwnerOrReadOnly
 from .serializers import WishlistSerializer, UserSerializer, ItemSerializer
 from .models import Wishlist, Item
 
