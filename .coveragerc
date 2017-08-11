@@ -1,0 +1,5 @@
+[run]
+include = wishlist/*
+omit = *migrations*, *tests*
+plugins =
+    django_coverage_plugin
